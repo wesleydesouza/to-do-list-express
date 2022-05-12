@@ -1,30 +1,24 @@
 const express = require("express");//import tando o express
+const path = require("path");
+
+const checkListRouter = require("./src/routes/checklist");
+const rootRouter = require("./src/routes/index");
+require("./config/database");
+
 
 const app = express();
-
-//criando uma rota
-app.get("/", (req, res) => {
-    res.send("<h1>Minha Lista de Tarefas</h1>");
-});
-
-//criando um MiddleWare
 app.use(express.json());
 
-const log = (req, res, next) =>{
-    console.log(req.body);
-    console.log(`Data: ${Date.now()}`);
-    next();
-}
+//configurando o arquivo estatico no express
+app.use(express.static(path.join(__dirname, "public")));
 
-app.use(log);
+app.set("views", path.join(__dirname, "src/views"));
+app.set("view engine", "ejs");
 
-//devolvendo um json
-app.get("/json", (req, res) =>{
-    
-    res.json({title: "Tarefa X", done: true});
-})
+//usamos o checkList como se fosse um middleware
+app.use("/",rootRouter);
+app.use("/checklists",checkListRouter);
 
-//criando um servidor
 app.listen(3000, () => {
     console.log("Servidor foi iniciado");
 })
