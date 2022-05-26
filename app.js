@@ -1,4 +1,5 @@
 const express = require("express");//import tando o express
+const methodOverride = require("method-override");
 const path = require("path");
 
 const checkListRouter = require("./src/routes/checklist");
@@ -8,7 +9,8 @@ require("./config/database");
 
 const app = express();
 app.use(express.json());
-
+app.use(express.urlencoded({extended: true}));
+app.use(methodOverride("_method", {methods: ["POST", "GET"]}));
 //configurando o arquivo estatico no express
 app.use(express.static(path.join(__dirname, "public")));
 
