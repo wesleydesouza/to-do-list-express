@@ -3,6 +3,7 @@ const methodOverride = require("method-override");
 const path = require("path");
 
 const checkListRouter = require("./src/routes/checklist");
+const taskRouter = require("./src/routes/task");
 const rootRouter = require("./src/routes/index");
 require("./config/database");
 
@@ -20,7 +21,8 @@ app.set("view engine", "ejs");
 //usamos o checkList como se fosse um middleware
 app.use("/",rootRouter);
 app.use("/checklists",checkListRouter);
-
+app.use("/checklists",taskRouter.checklistDepedent);
+app.use("/tasks", taskRouter.simple);
 app.listen(3000, () => {
     console.log("Servidor foi iniciado");
 })
